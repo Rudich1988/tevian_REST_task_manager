@@ -1,6 +1,8 @@
 from task_manager.utils.repository import AbstractRepository
 from task_manager.schemas.images import ImageSchemaAdd
 from task_manager.db.db import Session
+from task_manager.services.faces import FaceService
+from task_manager.utils.services import AbstractFaceCloudService
 
 
 class ImageService:
@@ -8,10 +10,18 @@ class ImageService:
         self.image_repo: AbstractRepository = image_repo
         self.session: Session = session
 
-    def add_image(self, image_data: dict, schema: ImageSchemaAdd) -> dict:
+    def add_image(
+            self,
+            image_data: dict,
+            schema: ImageSchemaAdd,
+            faces_service: FaceService,
+            faces_cloud_service: AbstractFaceCloudService
+    ) -> dict:
         with self.session as s:
             image = self.image_repo(s).add_one(image_data)
-            return schema().dump(image)
+            faces_data = faces_cloud_service().detected_faces(image.filename)
+        return faces_data
+        #return schema().dump(image)
 
     def get_image(self, image_data: dict, schema: ImageSchemaAdd) -> dict:
         with self.session as s:

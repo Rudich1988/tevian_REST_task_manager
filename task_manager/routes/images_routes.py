@@ -4,6 +4,8 @@ from task_manager.services.images import ImageService
 from task_manager.repositories.images import ImageRepository
 from task_manager.schemas.images import ImageSchemaAdd
 from task_manager.db.db import Session
+from task_manager.services.faces import FaceService
+from task_manager.services.tevian import TevianFaceCloudService
 
 
 images_bp = Blueprint('images_routes', __name__)
@@ -37,21 +39,25 @@ def create_image(
         image_service=ImageService,
         image_repo=ImageRepository,
         image_schema=ImageSchemaAdd,
-        session=Session
+        session=Session,
+        faces_service=FaceService,
+        face_cloud_service=TevianFaceCloudService
 ):
-    try:
-        image_data = request.json
-        image = image_service(
+    #try:
+    image_data = request.json
+    image = image_service(
             image_repo=image_repo,
             session=session()).add_image(
             image_data=image_data,
-            schema=image_schema
-        )
-    except:
-        return make_response(
-            jsonify({'error': 'Error create image'}),
-            404
-        )
+            schema=image_schema,
+            faces_cloud_service=face_cloud_service,
+            faces_service=faces_service
+    )
+    #except:
+     #   return make_response(
+      #      jsonify({'error': 'Error create image'}),
+       #     404
+        #)
     return jsonify(image)
 
 
