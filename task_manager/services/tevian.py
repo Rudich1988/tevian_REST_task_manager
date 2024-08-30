@@ -5,6 +5,11 @@ from task_manager.config.base import Config
 
 
 class TevianFaceCloudService(AbstractFaceCloudService):
+    '''
+    чтение файла по полученному пути и передача запроса в их программу
+    получение ответа(должен быть json)
+    try except просто для отладки. их удалю потом
+    '''
     def detected_faces(self, filename: str):
         try:
             url = f"{Config.FACE_CLOUD_URL}/api/v1/detect"
