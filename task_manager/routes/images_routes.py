@@ -49,7 +49,7 @@ def create_image(
         )
     except:
         return make_response(
-            jsonify({'error': 'Error create task'}),
+            jsonify({'error': 'Error create image'}),
             404
         )
     return jsonify(image)
