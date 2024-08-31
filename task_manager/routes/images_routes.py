@@ -40,8 +40,8 @@ def create_image(
         image_repo=ImageRepository,
         image_schema=ImageSchemaAdd,
         session=Session,
-        faces_service=FaceService, # здесь и ниже я передал еще параметров, потом приберу это все
-        face_cloud_service=TevianFaceCloudService #и отправлю уже в сервисы.больше здесь в коде ничего не менял
+        faces_service=FaceService,
+        face_cloud_service=TevianFaceCloudService
 ):
     #try:
     image_data = request.json

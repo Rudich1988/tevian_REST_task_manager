@@ -5,33 +5,18 @@ from task_manager.config.base import Config
 
 
 class TevianFaceCloudService(AbstractFaceCloudService):
-    '''
-    чтение файла по полученному пути и передача запроса в их программу
-    получение ответа(должен быть json)
-    try except просто для отладки. их удалю потом
-    '''
     def detected_faces(self, filename: str):
-        try:
-            url = f"{Config.FACE_CLOUD_URL}/api/v1/detect"
-            token = Config.FACE_ClOUD_TOKEN
-            headers = {
-                'Authorization': f'Bearer {token}',
-            }
-            with open(filename, 'rb') as image_file:
-                files = {'file': ('image.jpg', image_file, 'image/jpeg')}
-                response = requests.post(
-                    url=url,
-                    files=files,
-                    headers=headers
-                )
-            #response.raise_for_status()
-            return response.json()
-        except requests.exceptions.HTTPError as http_err:
-            print(f"HTTP error occurred: {http_err}")
-            try:
-                # Печать тела ответа для диагностики
-                print("Response body:", response.json())
-            except ValueError:
-                print("Response body is not JSON.")
-        except Exception as err:
-            print(f"Other error occurred: {err}")
+        url = f"{Config.FACE_CLOUD_URL}/api/v1/detect"
+        token = Config.FACE_ClOUD_TOKEN
+        headers = {
+            'Authorization': f'Bearer {token}',
+            'Content-Type': 'image/jpeg'
+        }
+        with open(filename, 'rb') as image_file:
+            response = requests.post(
+                url=url,
+                headers=headers,
+                data=image_file
+            )
+        faces_data = response.json()['data']
+        return response.json()

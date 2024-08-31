@@ -18,16 +18,10 @@ class ImageService:
             faces_cloud_service: AbstractFaceCloudService
     ) -> dict:
         with self.session as s:
-            '''создание модели images. там хранится поле пути до файла и task_id'''
             image = self.image_repo(s).add_one(image_data)
-            '''здесь я обращаюсь к их сервису и получаю данные о лицах'''
             faces_data = faces_cloud_service().detected_faces(image.filename)
-            '''поставил пока заглушку, чтобы понять что там должно приходить
-            дальше там будет обращение к faces_service для сохранения объектов faces
-            faces_routes потом совсем уберу. за ненадобностью
-            '''
-        return faces_data
-        #return schema().dump(image)
+            return faces_data
+            return schema().dump(image)
 
     def get_image(self, image_data: dict, schema: ImageSchemaAdd) -> dict:
         with self.session as s:
