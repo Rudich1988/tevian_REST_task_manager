@@ -33,7 +33,7 @@ def get_face(
         )
     return jsonify(face)
 
-
+'''
 @faces_bp.route('/faces', methods=['POST'])
 def create_face(
         face_service=FaceService,
@@ -55,7 +55,7 @@ def create_face(
             404
         )
     return jsonify(face)
-
+'''
 
 @faces_bp.route('/faces/<int:id>', methods=['DELETE'])
 def delete_face(

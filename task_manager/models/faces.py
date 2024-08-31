@@ -1,4 +1,4 @@
-from sqlalchemy import BigInteger, ForeignKey, String, Float
+from sqlalchemy import BigInteger, ForeignKey, String, Float, JSON
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from task_manager.db.db import ModelBase
@@ -12,8 +12,8 @@ class Face(ModelBase):
         primary_key=True,
         autoincrement=True
     )
-    bounding_box: Mapped[str] = mapped_column(
-        String(500),
+    bounding_box: Mapped[dict] = mapped_column(
+        JSON,
         nullable=False
     )
     gender: Mapped[str] = mapped_column(

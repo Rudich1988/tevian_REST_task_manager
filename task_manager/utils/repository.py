@@ -36,6 +36,12 @@ class SQLAlchemyRepository(AbstractRepository):
         self.session.commit()
         return obj
 
+    def add_objects(self, data):
+        objects = [self.model(**item) for item in data]
+        self.session.add_all(objects)
+        self.session.commit()
+        return [obj.id for obj in objects]
+
     def get_one(self, data: dict):
         obj = self.session.query(self.model).filter_by(**data)[0]
         return obj

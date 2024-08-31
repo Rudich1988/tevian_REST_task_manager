@@ -19,8 +19,13 @@ class ImageService:
     ) -> dict:
         with self.session as s:
             image = self.image_repo(s).add_one(image_data)
-            faces_data = faces_cloud_service().detected_faces(image.filename)
-            return faces_data
+            faces_data = faces_cloud_service().detected_faces(
+                filename=image.filename,
+                image_id=image.id
+            )
+            if faces_data:
+                print(type(faces_data[0]['bounding_box']))
+                faces_service(session=s).add_faces(faces_data=faces_data)
             return schema().dump(image)
 
     def get_image(self, image_data: dict, schema: ImageSchemaAdd) -> dict:
