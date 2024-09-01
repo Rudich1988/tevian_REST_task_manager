@@ -2,12 +2,14 @@ from flask import request, jsonify, make_response, Blueprint
 
 from task_manager.services.images import ImageService
 from task_manager.db.db import Session
+from task_manager.app import auth
 
 
 images_bp = Blueprint('images_routes', __name__)
 
 
 @images_bp.route('/images/<int:id>', methods=['GET'])
+@auth.login_required
 def get_image(id: int, image_service=ImageService, session=Session):
     try:
         image = image_service(
@@ -23,6 +25,7 @@ def get_image(id: int, image_service=ImageService, session=Session):
 
 
 @images_bp.route('/images', methods=['POST'])
+@auth.login_required
 def create_image(image_service=ImageService, session=Session,):
     try:
         image_data = request.json
@@ -36,6 +39,7 @@ def create_image(image_service=ImageService, session=Session,):
 
 
 @images_bp.route('/images/<int:id>', methods=['DELETE'])
+@auth.login_required
 def delete_image(id: int, image_service=ImageService, session=Session):
     try:
         response = image_service(session=session()).delete_image({'id': id})

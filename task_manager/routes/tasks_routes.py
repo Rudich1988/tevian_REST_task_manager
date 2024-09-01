@@ -23,6 +23,7 @@ def get_task(id: int, task_service=TaskService, session=Session):
 
 
 @tasks_bp.route('/tasks', methods=['POST'])
+@auth.login_required
 def create_task(task_service=TaskService, session=Session):
     try:
         task_data = request.json
@@ -36,6 +37,7 @@ def create_task(task_service=TaskService, session=Session):
 
 
 @tasks_bp.route('/tasks/<int:id>', methods=['DELETE'])
+@auth.login_required
 def delete_task(id: int, task_service=TaskService, session=Session):
     try:
         response = task_service(session=session()).delete_task({'id': id})

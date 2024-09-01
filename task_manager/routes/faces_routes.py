@@ -6,12 +6,14 @@ from task_manager.services.faces import FaceService
 from task_manager.repositories.faces import FaceRepository
 from task_manager.schemas.faces import FaceSchema
 from task_manager.db.db import Session
+from task_manager.app import auth
 
 
 faces_bp = Blueprint('faces_routes', __name__)
 
 
 @faces_bp.route('/faces/<int:id>', methods=['GET'])
+@auth.login_required
 def get_face(
         id: int,
         face_service=FaceService,
@@ -35,6 +37,7 @@ def get_face(
 
 
 @faces_bp.route('/faces', methods=['POST'])
+@auth.login_required
 def create_face(
         face_service=FaceService,
         face_repo=FaceRepository,
