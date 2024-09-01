@@ -24,24 +24,24 @@ def get_image(id: int, image_service=ImageService, session=Session):
 
 @images_bp.route('/images', methods=['POST'])
 def create_image(image_service=ImageService, session=Session,):
-    #try:
-    image_data = request.json
-    image = image_service(session=session()).add_image(image_data=image_data)
-    #except:
-     #   return make_response(
-      #      jsonify({'error': 'Error create image'}),
-       #     404
-        #)
+    try:
+        image_data = request.json
+        image = image_service(session=session()).add_image(image_data=image_data)
+    except:
+        return make_response(
+            jsonify({'error': 'Error create image'}),
+            404
+        )
     return jsonify(image)
 
 
 @images_bp.route('/images/<int:id>', methods=['DELETE'])
 def delete_image(id: int, image_service=ImageService, session=Session):
-    #try:
-    response = image_service(session=session()).delete_image({'id': id})
-    #except:
-     #   return make_response(
-      #      jsonify({'error': 'Error delete image'}),
-       #     404
-        #)
+    try:
+        response = image_service(session=session()).delete_image({'id': id})
+    except:
+        return make_response(
+            jsonify({'error': 'Error delete image'}),
+            404
+        )
     return make_response(jsonify(response))
