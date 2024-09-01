@@ -31,11 +31,12 @@ class ImageService:
             if faces_data:
                 faces_repo(session=s).add_objects(data=faces_data)
                 task = task_repo(s).get_one({'id': image.task_id})
-                new_task_data = statistic_service().change_statistic(
-                    task=task,
-                    data=faces_data,
-                    operator='+'
-                )
+                if faces_data:
+                    new_task_data = statistic_service().change_statistic(
+                        task=task,
+                        data=faces_data,
+                        operator='+'
+                    )
                 task_repo(s).update_one(task, new_task_data)
             return schema().dump(image)
 
