@@ -1,3 +1,5 @@
+from requests import session
+
 from task_manager.utils.repository import AbstractRepository
 from task_manager.repositories.faces import FaceRepository
 from task_manager.schemas.faces import FaceSchema
@@ -12,8 +14,9 @@ class FaceService:
         self.session: Session = session
 
     def add_faces(self, faces_data: dict, schema=FaceSchema(many=True)) -> dict:
-        faces = self.face_repo(session=self.session).add_objects(faces_data)
-        return schema.dump(faces)
+        with self.session as s:
+            faces = self.face_repo(s).add_objects(faces_data)
+            return schema.dump(faces)
 
     def get_face(self, face_data: dict, schema: FaceSchema) -> dict:
         with self.session as s:

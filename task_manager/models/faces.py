@@ -12,8 +12,8 @@ class Face(ModelBase):
         primary_key=True,
         autoincrement=True
     )
-    bounding_box: Mapped[dict] = mapped_column(
-        JSON,
+    bounding_box: Mapped[str] = mapped_column(
+        String(500),
         nullable=False
     )
     gender: Mapped[str] = mapped_column(

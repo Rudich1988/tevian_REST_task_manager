@@ -50,8 +50,7 @@ def create_image(
             session=session()).add_image(
             image_data=image_data,
             schema=image_schema,
-            faces_cloud_service=face_cloud_service,
-            faces_service=faces_service
+            faces_cloud_service=face_cloud_service
     )
     #except:
      #   return make_response(
