@@ -37,6 +37,7 @@ from task_manager.models.tasks import Task
 from task_manager.models.images import Image
 from task_manager.models.faces import Face
 
+
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")

@@ -23,4 +23,9 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    ${downgrades if downgrades else "pass"}
+    op.alter_column(
+        'faces', 'bounding_box',
+        existing_type=sa.JSON(),
+        type_=sa.String(length=500),
+        nullable=False
+    )

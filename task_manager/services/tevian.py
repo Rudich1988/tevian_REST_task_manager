@@ -34,7 +34,7 @@ class TevianFaceCloudService(AbstractFaceCloudService):
         for face in data:
             face_data = {}
             face_data['image_id'] = image_id
-            face_data['bounding_box'] = json.dumps(face['bbox'])
+            face_data['bounding_box'] = face['bbox']#json.dumps(face['bbox'])
             face_data['age'] = face['demographics']['age']['mean']
             face_data['gender'] = face['demographics']['gender']
             faces.append(face_data)
