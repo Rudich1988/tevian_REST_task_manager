@@ -78,7 +78,7 @@ class StatisticService:
         if remaining_count > 0:
             task['woman_avg_age'] = remaining_age / remaining_count
         else:
-            task['woman_avg_age'] = 0
+            task['women_avg_age'] = 0
         task['women_counter'] -= women_quantity
 
         remaining_count = task['male_counter'] - men_quantity
