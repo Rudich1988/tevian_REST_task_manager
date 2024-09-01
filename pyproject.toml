@@ -16,6 +16,7 @@ marshmallow = "^3.22.0"
 alembic = "^1.13.2"
 psycopg2-binary = "^2.9.9"
 requests = "^2.32.3"
+flask-httpauth = "^4.8.0"
 
 
 [build-system]

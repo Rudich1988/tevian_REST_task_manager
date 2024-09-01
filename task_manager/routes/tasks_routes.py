@@ -2,12 +2,14 @@ from flask import request, jsonify, make_response, Blueprint
 
 from task_manager.services.tasks import TaskService
 from task_manager.db.db import Session
+from task_manager.app import auth
 
 
 tasks_bp = Blueprint('tasks_routes', __name__)
 
 
 @tasks_bp.route('/tasks/<int:id>', methods=['GET'])
+@auth.login_required
 def get_task(id: int, task_service=TaskService, session=Session):
     try:
         task = task_service(
