@@ -4,7 +4,6 @@ from sqlalchemy import delete
 from sqlalchemy.exc import NoResultFound
 
 from task_manager.db.db import Session
-from task_manager.schemas.tasks import TaskSchemaAdd
 
 
 class AbstractRepository(ABC):
@@ -49,10 +48,6 @@ class SQLAlchemyRepository(AbstractRepository):
 
     def update_one(self, obj, data):
         pass
-        #for key, value in data.items():
-         #   setattr(obj, key, value)
-        #self.session.commit()
-        #return obj
 
     def delete_one(self, data: dict) -> int:
         stmt = delete(self.model)

@@ -1,5 +1,6 @@
-import requests
 import json
+
+import requests
 
 from task_manager.utils.services import AbstractFaceCloudService
 from task_manager.config.base import Config

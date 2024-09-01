@@ -10,12 +10,12 @@ class TaskService:
         self.task_repo: AbstractRepository = task_repo
         self.session: Session = session
 
-    def add_task(self, task_data: dict, schema: TaskSchemaAdd) -> dict:
+    def add_task(self, task_data: dict, schema=TaskSchemaAdd) -> dict:
         with self.session as s:
             task = self.task_repo(s).add_one(task_data)
             return schema().dump(task)
 
-    def get_task(self, task_data: dict, schema: TaskSchemaAdd) -> dict:
+    def get_task(self, task_data: dict, schema=TaskSchemaAdd) -> dict:
         with self.session as s:
             task = self.task_repo(s).get_one(task_data)
             return schema().dump(task)

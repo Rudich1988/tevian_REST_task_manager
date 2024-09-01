@@ -33,7 +33,7 @@ def get_face(
         )
     return jsonify(face)
 
-'''
+
 @faces_bp.route('/faces', methods=['POST'])
 def create_face(
         face_service=FaceService,
@@ -55,22 +55,3 @@ def create_face(
             404
         )
     return jsonify(face)
-'''
-
-@faces_bp.route('/faces/<int:id>', methods=['DELETE'])
-def delete_face(
-        id: int,
-        face_service=FaceService,
-        face_repo=FaceRepository,
-        session=Session
-):
-    try:
-        response = face_service(
-            face_repo=face_repo,
-            session=session()).delete_face({'id': id})
-    except:
-        return make_response(
-            jsonify({'error': 'Error delete face'}),
-            404
-        )
-    return make_response(jsonify(response))
