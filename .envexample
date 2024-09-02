@@ -1,0 +1,8 @@
+SECRET_KEY=secret_key
+DATABASE_URL=postgresql://owner:password@host/dbname
+FACE_ClOUD_TOKEN=your_face_cloud_token
+EMAIL_NAME=emailname
+EMAIL_PASSWORD=emailpassword
+FACE_CLOUD_URL=https://backend.facecloud.tevian.ru
+FILEPATH=directory_where_files_will_be_saved
+MAX_FILE_SIZE_MB=maximum_file_size_mb
