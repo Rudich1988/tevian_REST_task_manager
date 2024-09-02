@@ -27,4 +27,4 @@ from task_manager.routes.images_routes import *
 
 app.register_blueprint(tasks_bp)
 app.register_blueprint(images_bp)
-#app.register_blueprint(faces_bp)
+app.register_blueprint(faces_bp)

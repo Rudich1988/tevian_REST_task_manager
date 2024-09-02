@@ -2,7 +2,6 @@ from flask import request, jsonify, make_response, Blueprint
 from marshmallow import ValidationError
 
 from task_manager.services.tasks import TaskService
-from task_manager.db.db import Session
 from task_manager.app import auth
 from task_manager.schemas.tasks import TaskSchemaAdd
 
@@ -32,8 +31,7 @@ def create_task():
         task = TaskService().add_task(task_data=task_data)
     except ValidationError as error:
         return make_response({'error': error.messages}, 400)
-    except Exception as e:
-        print(e)
+    except Exception:
         return make_response(
             jsonify({'error': 'Error create task'}),
             404

@@ -19,7 +19,7 @@ class ImageService:
             statistic_service=StatisticService,
             task_repo=TaskRepository,
             schema=ImageSchemaAdd(),
-            file_operator = FileOperator
+            file_operator=FileOperator
     ):
         self.image_repo= image_repo
         self.session: Session = session
@@ -28,7 +28,7 @@ class ImageService:
         self.statistic_service = statistic_service
         self.task_repo = task_repo
         self.schema = schema
-        self.file_operator = FileOperator()
+        self.file_operator = file_operator()
 
     def add_image(self, image_data: dict) -> dict:
         with self.session() as s:

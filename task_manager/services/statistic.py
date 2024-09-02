@@ -1,12 +1,9 @@
 from task_manager.schemas.tasks import TaskSchemaAdd
-from task_manager.models.tasks import Task
-from task_manager.repositories.tasks import TaskRepository
 
 
 class StatisticService:
     def increment(
             self,
-            #task,
             data,
             task_id,
             task_repo,
@@ -94,4 +91,3 @@ class StatisticService:
         task_data['men_avg_age'] = task['men_avg_age']
         task_data['women_avg_age'] = task['women_avg_age']
         task_repo.update_one({'id': task['id']}, task_data)
-        #return task_data

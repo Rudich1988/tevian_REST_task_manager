@@ -1,11 +1,9 @@
 from flask import request, jsonify, make_response, Blueprint
-from marshmallow import ValidationError
 from task_manager.services.file_operator import FileOperator
 from werkzeug.exceptions import RequestEntityTooLarge
 
 from task_manager.services.images import ImageService
 from task_manager.app import auth
-from task_manager.schemas.images import ImageSchemaAdd
 
 
 images_bp = Blueprint('images_routes', __name__)

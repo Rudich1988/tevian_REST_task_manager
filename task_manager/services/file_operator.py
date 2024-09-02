@@ -1,9 +1,11 @@
 import os
-
-from task_manager.config.base import Config
 import uuid
+
 from werkzeug.exceptions import RequestEntityTooLarge
 from werkzeug.utils import secure_filename
+
+from task_manager.config.base import Config
+
 
 class FileOperator:
 
