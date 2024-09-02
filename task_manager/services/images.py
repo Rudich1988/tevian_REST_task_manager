@@ -1,4 +1,3 @@
-from task_manager.utils.repository import AbstractRepository
 from task_manager.schemas.images import ImageSchemaAdd
 from task_manager.db.db import Session
 from task_manager.db.db import db_session
@@ -7,6 +6,7 @@ from task_manager.repositories.faces import FaceRepository
 from task_manager.services.tevian import TevianFaceCloudService
 from task_manager.repositories.images import ImageRepository
 from task_manager.services.statistic import StatisticService
+from task_manager.services.file_operator import FileOperator
 
 
 class ImageService:
@@ -18,7 +18,8 @@ class ImageService:
             faces_repo=FaceRepository,
             statistic_service=StatisticService,
             task_repo=TaskRepository,
-            schema=ImageSchemaAdd()
+            schema=ImageSchemaAdd(),
+            file_operator = FileOperator
     ):
         self.image_repo= image_repo
         self.session: Session = session
@@ -27,12 +28,13 @@ class ImageService:
         self.statistic_service = statistic_service
         self.task_repo = task_repo
         self.schema = schema
+        self.file_operator = FileOperator()
 
     def add_image(self, image_data: dict) -> dict:
         with self.session() as s:
             image = self.image_repo(s).add_one(image_data)
             faces_data = self.faces_cloud_service().detected_faces(
-                filename=image.filename,
+                file=image.filepath,
                 image_id=image.id
             )
             if faces_data:
@@ -53,6 +55,7 @@ class ImageService:
         with self.session() as s:
             image = self.image_repo(s).get_one(data=image_data)
             faces = self.schema.dump(image)['faces']
+            filepath = self.schema.dump(image)['filepath']
             if faces:
                 new_task_data = self.statistic_service().decrement(
                     data=faces,
@@ -60,4 +63,5 @@ class ImageService:
                     task_id=image.task_id
                 )
             count = self.image_repo(s).delete_one(image_data)
+            self.file_operator.delete(filepath)
             return {'success': f'Number of images deleted: {count}'}

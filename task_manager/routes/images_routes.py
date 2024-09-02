@@ -34,7 +34,7 @@ def create_image():
         file_size = request.content_length
         image_data = FileOperator().save(image, file_size)
         image_data['task_id'] = task_id
-        image_data['filename']: filename
+        image_data['filename'] = filename
         image = ImageService().add_image(image_data=image_data)
         return jsonify(image)
     except TypeError:

@@ -13,7 +13,10 @@ class Image(ModelBase):
         autoincrement=True
     )
     filename: Mapped[str] = mapped_column(String(500))
-    unique_filename: Mapped[str] = mapped_column(String(500))
+    unique_filename: Mapped[str] = mapped_column(
+        String(500),
+        unique=True
+    )
     filepath: Mapped[str] = mapped_column(String(500))
     task_id: Mapped[int] = mapped_column(
         ForeignKey(

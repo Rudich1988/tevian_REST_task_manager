@@ -23,3 +23,6 @@ class FileOperator:
     def check_file_type(self, file_type):
         if file_type not in ['image/jpeg']:
             raise TypeError('change type file')
+
+    def delete(self, filepath):
+        os.remove(filepath)
