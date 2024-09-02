@@ -1,4 +1,3 @@
-'''
 import json
 
 from flask import request, jsonify, make_response, Blueprint
@@ -36,7 +35,7 @@ def get_face(
         )
     return jsonify(face)
 
-
+'''
 @faces_bp.route('/faces', methods=['POST'])
 @auth.login_required
 def create_face(

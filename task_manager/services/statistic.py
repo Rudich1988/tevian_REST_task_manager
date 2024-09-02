@@ -46,7 +46,6 @@ class StatisticService:
 
     def decrement(
             self,
-            #task,
             task_id,
             data,
             task_repo,

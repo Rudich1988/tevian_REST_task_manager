@@ -1,4 +1,3 @@
-'''
 from task_manager.utils.repository import AbstractRepository
 from task_manager.repositories.faces import FaceRepository
 from task_manager.schemas.faces import FaceSchema
@@ -19,4 +18,3 @@ class FaceService:
         with self.session as s:
             face = self.face_repo(s).get_one(face_data)
             return schema().dump(face)
-'''

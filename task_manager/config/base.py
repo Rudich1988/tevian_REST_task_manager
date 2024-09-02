@@ -13,3 +13,5 @@ class Config(object):
     EMAIL_NAME = os.getenv('EMAIL_NAME')
     EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')
     FACE_CLOUD_URL = os.getenv('FACE_CLOUD_URL')
+    FILEPATH = os.getenv('FILEPATH')
+    MAX_FILE_SIZE_MB = os.getenv('MAX_FILE_SIZE_MB')

@@ -32,7 +32,8 @@ def create_task():
         task = TaskService().add_task(task_data=task_data)
     except ValidationError as error:
         return make_response({'error': error.messages}, 400)
-    except Exception:
+    except Exception as e:
+        print(e)
         return make_response(
             jsonify({'error': 'Error create task'}),
             404

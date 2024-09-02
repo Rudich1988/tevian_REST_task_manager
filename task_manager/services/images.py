@@ -1,6 +1,7 @@
 from task_manager.utils.repository import AbstractRepository
 from task_manager.schemas.images import ImageSchemaAdd
 from task_manager.db.db import Session
+from task_manager.db.db import db_session
 from task_manager.repositories.tasks import TaskRepository
 from task_manager.repositories.faces import FaceRepository
 from task_manager.services.tevian import TevianFaceCloudService
@@ -11,7 +12,7 @@ from task_manager.services.statistic import StatisticService
 class ImageService:
     def __init__(
             self,
-            session=Session,
+            session=db_session,
             image_repo=ImageRepository,
             faces_cloud_service=TevianFaceCloudService,
             faces_repo=FaceRepository,

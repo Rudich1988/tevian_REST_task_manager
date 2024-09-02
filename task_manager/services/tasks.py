@@ -18,7 +18,9 @@ class TaskService:
     def add_task(self, task_data: dict) -> dict:
         with self.session() as s:
             task = self.task_repo(s).add_one(task_data)
-            return self.schema.dump(task)
+            task = self.schema.dump(task)
+            #return self.schema.dump(task)
+        return task
 
     def get_task(self, task_data: dict) -> dict:
         with self.session() as s:
