@@ -1,25 +1,18 @@
 from task_manager.schemas.tasks import TaskSchemaAdd
 from task_manager.models.tasks import Task
+from task_manager.repositories.tasks import TaskRepository
 
 
 class StatisticService:
-    def change_statistic(
+    def increment(
             self,
-            task: Task,
+            #task,
             data,
-            operator: str
-    ):
-        if operator == '+':
-            return self.get_progress_statistic(task, data)
-        return self.get_regress_statistic(task, data)
-
-
-    def get_progress_statistic(
-            self,
-            task,
-            data,
+            task_id,
+            task_repo,
             schema=TaskSchemaAdd
     ):
+        task = task_repo.get_one({'id': task_id})
         task = schema().dump(task)
         men_quantity = 0
         men_age = 0
@@ -49,14 +42,17 @@ class StatisticService:
             else:
                 task['women_avg_age'] = (task['women_avg_age'] + \
                                          (women_age / women_quantity)) / 2
-        return task
+        return self.update_statistic(task, task_repo)
 
-    def get_regress_statistic(
+    def decrement(
             self,
-            task,
+            #task,
+            task_id,
             data,
+            task_repo,
             schema=TaskSchemaAdd
     ):
+        task = task_repo.get_one({'id': task_id})
         task = schema().dump(task)
         men_quantity = 0
         men_age = 0
@@ -89,4 +85,14 @@ class StatisticService:
         else:
             task['men_avg_age'] = 0
         task['male_counter'] -= men_quantity
-        return task
+        return self.update_statistic(task, task_repo)
+
+    def update_statistic(self, task, task_repo):
+        task_data = {}
+        task_data['faces_counter'] = task['faces_counter']
+        task_data['male_counter'] = task['male_counter']
+        task_data['women_counter'] = task['women_counter']
+        task_data['men_avg_age'] = task['men_avg_age']
+        task_data['women_avg_age'] = task['women_avg_age']
+        task_repo.update_one({'id': task['id']}, task_data)
+        #return task_data

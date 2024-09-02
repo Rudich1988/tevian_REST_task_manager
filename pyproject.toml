@@ -19,6 +19,10 @@ requests = "^2.32.3"
 flask-httpauth = "^4.8.0"
 
 
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.2"
+flake8 = "^7.1.1"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

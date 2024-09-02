@@ -9,59 +9,54 @@ from task_manager.services.statistic import StatisticService
 
 
 class ImageService:
-    def __init__(self, session: Session, image_repo=ImageRepository):
-        self.image_repo: AbstractRepository = image_repo
-        self.session: Session = session
-
-    def add_image(
+    def __init__(
             self,
-            image_data: dict,
-            schema=ImageSchemaAdd,
+            session=Session,
+            image_repo=ImageRepository,
             faces_cloud_service=TevianFaceCloudService,
-            task_repo=TaskRepository,
             faces_repo=FaceRepository,
             statistic_service=StatisticService,
-    ) -> dict:
-        with self.session as s:
+            task_repo=TaskRepository,
+            schema=ImageSchemaAdd()
+    ):
+        self.image_repo= image_repo
+        self.session: Session = session
+        self.faces_cloud_service = faces_cloud_service
+        self.faces_repo = faces_repo
+        self.statistic_service = statistic_service
+        self.task_repo = task_repo
+        self.schema = schema
+
+    def add_image(self, image_data: dict) -> dict:
+        with self.session() as s:
             image = self.image_repo(s).add_one(image_data)
-            faces_data = faces_cloud_service().detected_faces(
+            faces_data = self.faces_cloud_service().detected_faces(
                 filename=image.filename,
                 image_id=image.id
             )
             if faces_data:
-                faces_repo(session=s).add_objects(data=faces_data)
-                task = task_repo(s).get_one({'id': image.task_id})
-                if faces_data:
-                    new_task_data = statistic_service().change_statistic(
-                        task=task,
-                        data=faces_data,
-                        operator='+'
-                    )
-                task_repo(s).update_one(task, new_task_data)
-            return schema().dump(image)
-
-    def get_image(self, image_data: dict, schema=ImageSchemaAdd) -> dict:
-        with self.session as s:
-            image = self.image_repo(s).get_one(image_data)
-            return schema().dump(image)
-
-    def delete_image(
-            self,
-            image_data: dict,
-            task_repo=TaskRepository,
-            statistic_service=StatisticService,
-            schema=ImageSchemaAdd
-    ) -> dict:
-        with self.session as s:
-            image = self.image_repo(s).get_one(data=image_data)
-            task = task_repo(s).get_one(data={'id': image.task_id})
-            faces = schema().dump(image)['faces']
-            if faces:
-                new_task_data = statistic_service().change_statistic(
-                    task=task,
-                    data=faces,
-                    operator='-'
+                self.faces_repo(session=s).add_objects(data=faces_data)
+                self.statistic_service().increment(
+                    task_id = image.task_id,
+                    data=faces_data,
+                    task_repo=self.task_repo(s)
                 )
-            task_repo(s).update_one(task, new_task_data)
+            return self.schema.dump(image)
+
+    def get_image(self, image_data: dict) -> dict:
+        with self.session() as s:
+            image = self.image_repo(s).get_one(image_data)
+            return self.schema.dump(image)
+
+    def delete_image(self, image_data: dict) -> dict:
+        with self.session() as s:
+            image = self.image_repo(s).get_one(data=image_data)
+            faces = self.schema.dump(image)['faces']
+            if faces:
+                new_task_data = self.statistic_service().decrement(
+                    data=faces,
+                    task_repo=self.task_repo(s),
+                    task_id=image.task_id
+                )
             count = self.image_repo(s).delete_one(image_data)
             return {'success': f'Number of images deleted: {count}'}

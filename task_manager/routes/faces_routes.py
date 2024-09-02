@@ -1,3 +1,4 @@
+'''
 import json
 
 from flask import request, jsonify, make_response, Blueprint
@@ -58,3 +59,4 @@ def create_face(
             404
         )
     return jsonify(face)
+'''
