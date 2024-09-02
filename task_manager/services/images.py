@@ -1,4 +1,4 @@
-from task_manager.schemas.images import ImageSchemaAdd
+from task_manager.schemas.images import ImageSchemaAdd, ImageSchemaResponse
 from task_manager.db.db import Session
 from task_manager.db.db import db_session
 from task_manager.repositories.tasks import TaskRepository
@@ -19,7 +19,8 @@ class ImageService:
             statistic_service=StatisticService,
             task_repo=TaskRepository,
             schema=ImageSchemaAdd(),
-            file_operator=FileOperator
+            file_operator=FileOperator,
+            schema_response=ImageSchemaResponse
     ):
         self.image_repo= image_repo
         self.session: Session = session
@@ -29,6 +30,7 @@ class ImageService:
         self.task_repo = task_repo
         self.schema = schema
         self.file_operator = file_operator()
+        self.schema_response = schema_response()
 
     def add_image(self, image_data: dict) -> dict:
         with self.session() as s:
@@ -44,12 +46,12 @@ class ImageService:
                     data=faces_data,
                     task_repo=self.task_repo(s)
                 )
-            return self.schema.dump(image)
+            return self.schema_response.dump(image)
 
     def get_image(self, image_data: dict) -> dict:
         with self.session() as s:
             image = self.image_repo(s).get_one(image_data)
-            return self.schema.dump(image)
+            return self.schema_response.dump(image)
 
     def delete_image(self, image_data: dict) -> dict:
         with self.session() as s:

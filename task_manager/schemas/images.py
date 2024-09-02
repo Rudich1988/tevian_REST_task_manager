@@ -11,3 +11,10 @@ class ImageSchemaAdd(Schema):
         'FaceSchema',
         exclude=("image_id",))
     )
+
+class ImageSchemaResponse(Schema):
+    filename = fields.Str()
+    faces = fields.List(fields.Nested(
+        'FaceSchema',
+        exclude=("image_id", "id"))
+    )
