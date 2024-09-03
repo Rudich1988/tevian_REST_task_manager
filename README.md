@@ -18,12 +18,16 @@ poetry install
 poetry shell
 make dev
 ```
-
-### Примеры запросов:
-- Создание задачи
+- Docker:
 ```bash
-curl -u "yourmail@gmail.com:password" -H "Content-Type: application/json" -X POST -d '{"title": "task_name"}' http://hostname:port/tasks
+cp .envexample .env
 ```
+- Docker build and run:
+```bash
+docker-compose build
+docker-compose up
+```
+
 - Загрузка файла в задачу
 ```bash
 curl -u "yourmail@gmail.com:password" -F "file=@/путь/до/Изображения/image.jpg" -F "task_id={task_id}" http://host:port/images
