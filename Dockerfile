@@ -15,4 +15,4 @@ COPY . /app/
 EXPOSE 8080
 
 CMD alembic upgrade head \
-	&& poetry run flask --app task_manager/app:app --debug run --port 8080
+	&& poetry run flask --app task_manager/app:app --debug run host=0.0.0.0 --port 8080
