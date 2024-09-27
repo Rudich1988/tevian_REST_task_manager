@@ -1,7 +1,7 @@
 from marshmallow import Schema, fields
 
 
-class ImageSchemaAdd(Schema):
+class ImageSchema(Schema):
     id = fields.Int(dump_only=True)
     filename = fields.Str()
     unique_filename = fields.Str()
@@ -12,9 +12,9 @@ class ImageSchemaAdd(Schema):
         exclude=("image_id",))
     )
 
-class ImageSchemaResponse(Schema):
+class ImageResponseSchema(Schema):
     filename = fields.Str()
     faces = fields.List(fields.Nested(
         'FaceSchema',
-        exclude=("image_id", "id"))
+        exclude=("image_id",))
     )

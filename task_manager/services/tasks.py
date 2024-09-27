@@ -1,33 +1,30 @@
-from task_manager.db.db import db_session
-from task_manager.schemas.tasks import TaskSchemaAdd, TaskSchemaResponse
+from task_manager.schemas.tasks import TaskResponseSchema
 from task_manager.repositories.tasks import TaskRepository
+from task_manager.services.file_operator import FileOperator
 
 
 class TaskService:
     def __init__(
             self,
-            session=db_session,
-            task_repo=TaskRepository,
-            schema=TaskSchemaAdd,
-            response_schema=TaskSchemaResponse
+            task_repo: TaskRepository
     ):
         self.task_repo = task_repo
-        self.session = session
-        self.schema = schema()
-        self.schema_response = response_schema()
 
     def add_task(self, task_data: dict) -> dict:
-        with self.session() as s:
-            task = self.task_repo(s).add_one(task_data)
-            task = self.schema_response.dump(task)
-        return task
+        task = self.task_repo.add_one(task_data)
+        return TaskResponseSchema().dump(task)
+        #return task
 
     def get_task(self, task_data: dict) -> dict:
-        with self.session() as s:
-            task = self.task_repo(s).get_one(task_data)
-            return self.schema_response.dump(task)
+        task = self.task_repo.get_one(task_data)
+        return TaskResponseSchema().dump(task)
 
-    def delete_task(self, task_data: dict) -> dict:
-        with self.session() as s:
-            count = self.task_repo(s).delete_one(task_data)
-            return {'success': f'Number of tasks deleted: {count}'}
+    def delete_task(self,
+                    task_data: dict,
+                    file_operator: FileOperator
+                    ) -> dict:
+        images = self.task_repo.get_one(task_data).images
+        filepathes = [image.filepath for image in images]
+        file_operator.delete(filepathes=filepathes)
+        count = self.task_repo.delete_one(task_data)
+        return {'success': f'Number of tasks deleted: {count}'}

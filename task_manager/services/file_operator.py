@@ -9,12 +9,14 @@ from task_manager.config.base import Config
 
 class FileOperator:
 
-    def save(self, image, file_size):
+    def save(self, image, filepath):
+        image.save(filepath)
+
+    def check_file(self, image, file_size):
         self.check_file_size(file_size)
         self.check_file_type(image.content_type)
         unique_filename = secure_filename(f"{uuid.uuid4()}_{image.filename}")
         filepath = os.path.join(Config.FILEPATH, unique_filename)
-        image.save(filepath)
         return {'filepath': filepath, 'unique_filename': unique_filename}
 
     def check_file_size(self, file_size):
@@ -26,5 +28,8 @@ class FileOperator:
         if file_type not in ['image/jpeg']:
             raise TypeError('change type file')
 
-    def delete(self, filepath):
-        os.remove(filepath)
+    def delete(self, filepathes):
+        if not filepathes:
+            return
+        for filepath in filepathes:
+            os.remove(filepath)

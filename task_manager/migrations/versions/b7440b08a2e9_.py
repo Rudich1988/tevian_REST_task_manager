@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 6b05f071d666
+Revision ID: b7440b08a2e9
 Revises: 
-Create Date: 2024-09-01 18:53:06.995595
+Create Date: 2024-09-27 16:17:04.614726
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '6b05f071d666'
+revision: str = 'b7440b08a2e9'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -33,9 +33,12 @@ def upgrade() -> None:
     op.create_table('images',
     sa.Column('id', sa.BigInteger(), autoincrement=True, nullable=False),
     sa.Column('filename', sa.String(length=500), nullable=False),
+    sa.Column('unique_filename', sa.String(length=500), nullable=False),
+    sa.Column('filepath', sa.String(length=500), nullable=False),
     sa.Column('task_id', sa.BigInteger(), nullable=False),
     sa.ForeignKeyConstraint(['task_id'], ['tasks.id'], ondelete='CASCADE'),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('unique_filename')
     )
     op.create_table('faces',
     sa.Column('id', sa.BigInteger(), autoincrement=True, nullable=False),

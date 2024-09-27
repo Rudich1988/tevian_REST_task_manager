@@ -1,16 +1,16 @@
-from task_manager.schemas.tasks import TaskSchemaAdd
+from task_manager.schemas.tasks import TaskSchema
+from task_manager.repositories.tasks import TaskRepository
 
 
 class StatisticService:
     def increment(
             self,
-            data,
-            task_id,
-            task_repo,
-            schema=TaskSchemaAdd
+            data: dict,
+            task_id: int,
+            task_repo: TaskRepository
     ):
         task = task_repo.get_one({'id': task_id})
-        task = schema().dump(task)
+        task = TaskSchema().dump(task)
         men_quantity = 0
         men_age = 0
         women_quantity = 0
@@ -45,11 +45,10 @@ class StatisticService:
             self,
             task_id,
             data,
-            task_repo,
-            schema=TaskSchemaAdd
+            task_repo
     ):
         task = task_repo.get_one({'id': task_id})
-        task = schema().dump(task)
+        task = TaskSchema().dump(task)
         men_quantity = 0
         men_age = 0
         women_quantity = 0
