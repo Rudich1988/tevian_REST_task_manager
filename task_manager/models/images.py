@@ -21,7 +21,9 @@ class Image(ModelBase):
     task_id: Mapped[int] = mapped_column(
         ForeignKey(
             "tasks.id",
-            ondelete='CASCADE')
+            ondelete='CASCADE'
+        ),
+        index=True
     )
 
     task: Mapped['Task'] = relationship(

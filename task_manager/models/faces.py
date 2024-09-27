@@ -23,7 +23,9 @@ class Face(ModelBase):
     image_id: Mapped[int] = mapped_column(
         ForeignKey(
             "images.id",
-            ondelete='CASCADE')
+            ondelete='CASCADE'
+        ),
+        index=True
     )
     age: Mapped[float] = mapped_column(Float, nullable=False)
 
