@@ -24,7 +24,7 @@ class TaskService:
                     file_operator: FileOperator
                     ) -> dict:
         images = self.task_repo.get_one(task_data).images
-        filepathes = [image.filepath for image in images]
-        file_operator.delete(filepathes=filepathes)
+        files = [image.filepath for image in images]
+        file_operator.delete(files=files)
         count = self.task_repo.delete_one(task_data)
         return {'success': f'Number of tasks deleted: {count}'}

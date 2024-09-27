@@ -61,5 +61,5 @@ class ImageService:
                 task_id=image.task_id
             )
         count = self.image_repo.delete_one(image_data)
-        self.file_operator.delete(filepathes=[filepath])
+        self.file_operator.delete(files=[filepath])
         return {'success': f'Number of images deleted: {count}'}

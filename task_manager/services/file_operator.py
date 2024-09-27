@@ -28,8 +28,11 @@ class FileOperator:
         if file_type not in ['image/jpeg']:
             raise TypeError('change type file')
 
-    def delete(self, filepathes):
-        if not filepathes:
+    def delete(self, files):
+        if not files:
             return
-        for filepath in filepathes:
-            os.remove(filepath)
+        for file in files:
+            try:
+                os.remove(file)
+            except:
+                continue
