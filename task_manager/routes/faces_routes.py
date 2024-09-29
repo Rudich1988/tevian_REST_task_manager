@@ -19,9 +19,14 @@ def get_face(id: int):
                 face_repo=FaceRepository(s),
                 schema=FaceSchema()
             ).get_face(face_data={'id': id})
+    except IndexError:
+        return make_response(
+            jsonify({'error': 'face not found'}),
+            404
+        )
     except Exception:
         return make_response(
-            jsonify({'error': 'Error get image'}),
-            404
+            jsonify({'error': 'server error'}),
+            500
         )
     return jsonify(face)

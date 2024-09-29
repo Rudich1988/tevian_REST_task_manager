@@ -1,5 +1,6 @@
 from flask import request, jsonify, make_response, Blueprint
 from werkzeug.exceptions import RequestEntityTooLarge
+from sqlalchemy.exc import IntegrityError
 
 from task_manager.db.db import db_session
 from task_manager.repositories.faces import FaceRepository
@@ -12,6 +13,8 @@ from task_manager.services.images import ImageService
 from task_manager.app import auth
 from task_manager.services.statistic import StatisticService
 from task_manager.services.tevian import TevianFaceCloudService
+from task_manager.exceptions.custom_exceptions import FileTypeError
+from task_manager.exceptions.tevian_exceptions import TevianError
 
 
 images_bp = Blueprint('images_routes', __name__)
@@ -24,15 +27,14 @@ def get_image(id: int):
         with db_session() as s:
             repository = ImageRepository(s)
             image = ImageService(
-                image_repo=repository,
-                statistic_service=StatisticService(),
-                file_operator=FileOperator(),
-                session=s
+                image_repo=repository
             ).get_image(image_data={'id': id})
+    except IndexError:
+        return make_response({"error": "image not found"}, 404)
     except Exception:
         return make_response(
-            jsonify({'error': 'Error get image'}),
-            404
+            jsonify({'error': 'server error'}),
+            500
         )
     return jsonify(image)
 
@@ -49,25 +51,38 @@ def create_image():
         image_data['task_id'] = task_id
         image_data['filename'] = filename
         with db_session() as s:
-            repository = ImageRepository(s)
-            image = ImageService(
-                image_repo=repository,
-                statistic_service=StatisticService(),
-                file_operator=FileOperator(),
-                session=s
-            ).add_image(
-                image_data=image_data,
+            image_repository = ImageRepository(s)
+            image_data = ImageService(
+                image_repo=image_repository
+            ).add_image(image_data=image_data)
+            faces_data = TevianFaceCloudService().detected_faces(
                 file=image,
-                faces_cloud_service=TevianFaceCloudService()
+                image_id=image_data['id'])
+            if faces_data:
+                FaceRepository(s).add_objects(data=faces_data)
+                StatisticService().increment(
+                    task_id=image_data['task_id'],
+                    data=faces_data,
+                    task_repo=TaskRepository(s)
+                )
+            image_data = ImageService(
+                image_repo=image_repository
+            ).get_image(
+                image_data={'id': image_data['id']}
             )
-        return jsonify(image)
-    except TypeError:
-        return make_response({'error': 'change file type'}, 400)
+        FileOperator().save(image, image_data['filepath'])
+        return jsonify(image_data)
+    except IntegrityError:
+        return make_response({'error': 'incorrect task id'}, 404)
+    except TevianError as e:
+        return make_response({'error': e.message}, e.status_code)
+    except FileTypeError as e:
+        return make_response({'error': e.message}, e.status_code)
     except RequestEntityTooLarge:
         return make_response({'error': 'file is very large'}, 400)
     except Exception:
         return make_response(
-            jsonify({'error': 'Error create image'}),
+            jsonify({'error': 'server error'}),
             500
         )
 
@@ -77,16 +92,27 @@ def create_image():
 def delete_image(id: int):
     try:
         with db_session() as s:
-            repository = ImageRepository(s)
-            response = ImageService(
-                image_repo=repository,
-                statistic_service=StatisticService(),
-                file_operator=FileOperator(),
-                session=s
-            ).delete_image(image_data={'id': id})
-    except:
+            image_service = ImageService(ImageRepository(s))
+            image = image_service.get_image({'id': id})
+            faces = image['faces']
+            filepath = image['filepath']
+            if faces:
+                StatisticService().decrement(
+                    task_id=image['task_id'],
+                    data=faces,
+                    task_repo=TaskRepository(s)
+                )
+            FileOperator().delete(files=[filepath])
+            response = image_service.delete_image(
+                image_data={'id': id}
+            )
+    except IndexError:
         return make_response(
-            jsonify({'error': 'Error delete image'}),
-            404
+            jsonify({'error': 'image not found'}, 404)
+        )
+    except Exception:
+        return make_response(
+            jsonify({'error': 'server error'}),
+            500
         )
     return make_response(jsonify(response))

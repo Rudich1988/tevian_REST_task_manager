@@ -43,9 +43,9 @@ class StatisticService:
 
     def decrement(
             self,
-            task_id,
-            data,
-            task_repo
+            task_id: int,
+            data: dict,
+            task_repo: TaskRepository
     ):
         task = task_repo.get_one({'id': task_id})
         task = TaskSchema().dump(task)

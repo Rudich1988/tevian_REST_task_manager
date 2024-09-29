@@ -5,11 +5,13 @@ from werkzeug.exceptions import RequestEntityTooLarge
 from werkzeug.utils import secure_filename
 
 from task_manager.config.base import Config
+from task_manager.exceptions.custom_exceptions import FileTypeError
 
 
 class FileOperator:
 
     def save(self, image, filepath):
+        image.seek(0)
         image.save(filepath)
 
     def check_file(self, image, file_size):
@@ -26,7 +28,7 @@ class FileOperator:
 
     def check_file_type(self, file_type):
         if file_type not in ['image/jpeg']:
-            raise TypeError('change type file')
+            raise FileTypeError(message='change file type', status_code=400)
 
     def delete(self, files):
         if not files:

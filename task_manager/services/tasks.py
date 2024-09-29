@@ -26,5 +26,5 @@ class TaskService:
         images = self.task_repo.get_one(task_data).images
         files = [image.filepath for image in images]
         file_operator.delete(files=files)
-        count = self.task_repo.delete_one(task_data)
-        return {'success': f'Number of tasks deleted: {count}'}
+        self.task_repo.delete_one(task_data)
+        return {"success": f"deleted task id: {task_data['id']}"}

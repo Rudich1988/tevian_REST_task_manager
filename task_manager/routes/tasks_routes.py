@@ -21,7 +21,12 @@ def get_task(id: int):
             task = TaskService(
                 task_repo=repository
             ).get_task(task_data={'id': id})
-    except:
+    except IndexError:
+        return make_response(
+            jsonify({'error': 'task not found'}),
+            404
+        )
+    except Exception:
         return make_response(
             jsonify({'error': 'Error get task'}),
             404
@@ -62,9 +67,13 @@ def delete_task(id: int):
                 task_data={'id': id},
                 file_operator=FileOperator()
             )
-    except:
+    except IndexError:
         return make_response(
-            jsonify({'error': 'Error delete task'}),
-            404
+            jsonify({'error': 'task not found'}, 404)
+        )
+    except Exception:
+        return make_response(
+            jsonify({'error': 'server error'}),
+            500
         )
     return make_response(jsonify(response))

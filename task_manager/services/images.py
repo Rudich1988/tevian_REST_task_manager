@@ -10,40 +10,11 @@ from task_manager.db.db import db_session
 
 
 class ImageService:
-    def __init__(
-            self,
-            image_repo: ImageRepository,
-            statistic_service: StatisticService,
-            file_operator: FileOperator,
-            session: db_session
-    ):
+    def __init__(self, image_repo: ImageRepository):
         self.image_repo= image_repo
-        self.statistic_service = statistic_service
-        self.file_operator = file_operator
-        self.session = session
 
-    def add_image(
-            self,
-            image_data: dict,
-            file,
-            faces_cloud_service: AbstractFaceCloudService
-    ) -> dict:
+    def add_image(self, image_data: dict) -> dict:
         image = self.image_repo.add_one(image_data)
-        self.file_operator.save(
-            filepath=image_data['filepath'],
-            image=file
-        )
-        faces_data = faces_cloud_service.detected_faces(
-            file=image.filepath,
-            image_id=image.id
-        )
-        if faces_data:
-            FaceRepository(self.session).add_objects(data=faces_data)
-            self.statistic_service.increment(
-                task_id = image.task_id,
-                data=faces_data,
-                task_repo=TaskRepository(self.session)
-            )
         return ImageSchema().dump(image)
 
     def get_image(self, image_data: dict) -> dict:
@@ -51,15 +22,5 @@ class ImageService:
         return ImageSchema().dump(image)
 
     def delete_image(self, image_data: dict) -> dict:
-        image = self.image_repo.get_one(data=image_data)
-        faces = ImageSchema().dump(image)['faces']
-        filepath = ImageSchema().dump(image)['filepath']
-        if faces:
-            new_task_data = self.statistic_service.decrement(
-                data=faces,
-                task_repo=TaskRepository(self.session),
-                task_id=image.task_id
-            )
-        count = self.image_repo.delete_one(image_data)
-        self.file_operator.delete(files=[filepath])
-        return {'success': f'Number of images deleted: {count}'}
+        self.image_repo.delete_one(image_data)
+        return {"success": f"deleted image id: {image_data['id']}"}
