@@ -28,8 +28,8 @@ def get_task(id: int):
         )
     except Exception:
         return make_response(
-            jsonify({'error': 'Error get task'}),
-            404
+            jsonify({'error': 'server error'}),
+            500
         )
     return jsonify(task)
 
@@ -49,8 +49,8 @@ def create_task():
         return make_response({'error': error.messages}, 400)
     except Exception:
         return make_response(
-            jsonify({'error': 'Error create task'}),
-            404
+            jsonify({'error': 'server error'}),
+            500
         )
     return jsonify(task)
 
