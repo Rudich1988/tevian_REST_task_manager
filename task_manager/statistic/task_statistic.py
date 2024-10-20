@@ -1,5 +1,5 @@
-from task_manager.dto.tasks import TaskDTO, TaskStatisticDTO
-from task_manager.repositories.tasks import TaskRepository
+from task_manager.tasks.dto import TaskDTO, TaskStatisticDTO
+from task_manager.tasks.repository import TaskRepository
 
 
 class StatisticService:

@@ -1,10 +1,10 @@
-from task_manager.repositories.images import ImageRepository
-from task_manager.dto.images import ImageDTO, ImageDataDTO
+from task_manager.images.repository import ImageRepository
+from task_manager.images.dto import ImageDTO, ImageDataDTO
 from task_manager.db.db import Session
-from task_manager.repositories.tasks import TaskRepository
-from task_manager.services.statistic import StatisticService
-from task_manager.services.tevian import TevianFaceCloudService
-from task_manager.repositories.faces import FaceRepository
+from task_manager.tasks.repository import TaskRepository
+from task_manager.statistic.task_statistic import StatisticService
+from task_manager.images_analyzers.tevian import TevianFaceCloudService
+from task_manager.faces.repository import FaceRepository
 
 
 class ImageService:

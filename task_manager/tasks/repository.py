@@ -4,11 +4,11 @@ from sqlalchemy.orm import joinedload
 from sqlalchemy import select, delete
 from sqlalchemy.exc import NoResultFound
 
-from task_manager.models.tasks import Task
+from task_manager.tasks.models import Task
 from task_manager.utils.repository import SQLAlchemyRepository
-from task_manager.dto.tasks import TaskDTO, TaskCreateDTO, TaskStatisticDTO
-from task_manager.repositories.images import ImageRepository
-from task_manager.models.images import Image
+from task_manager.tasks.dto import TaskDTO, TaskCreateDTO, TaskStatisticDTO
+from task_manager.images.repository import ImageRepository
+from task_manager.images.models import Image
 
 
 class TaskRepository(SQLAlchemyRepository):

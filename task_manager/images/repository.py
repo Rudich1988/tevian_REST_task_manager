@@ -5,10 +5,10 @@ from sqlalchemy import select, delete
 from sqlalchemy.orm import raiseload, joinedload
 from sqlalchemy.exc import NoResultFound
 
-from task_manager.models.images import Image
+from task_manager.images.models import Image
 from task_manager.utils.repository import SQLAlchemyRepository
-from task_manager.dto.images import ImageDTO, ImageDataDTO
-from task_manager.repositories.faces import FaceRepository
+from task_manager.images.dto import ImageDTO, ImageDataDTO
+from task_manager.faces.repository import FaceRepository
 
 
 class ImageRepository(SQLAlchemyRepository):

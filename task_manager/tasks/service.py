@@ -1,7 +1,7 @@
-from task_manager.repositories.images import ImageRepository
-from task_manager.repositories.tasks import TaskRepository
-from task_manager.services.file_operator import FileOperator
-from task_manager.dto.tasks import TaskDTO, TaskCreateDTO
+from task_manager.images.repository import ImageRepository
+from task_manager.tasks.repository import TaskRepository
+from task_manager.images.file_operator import FileOperator
+from task_manager.tasks.dto import TaskDTO, TaskCreateDTO
 from task_manager.db.db import Session
 
 
@@ -19,11 +19,12 @@ class TaskService:
         task = self.task_repo.get_one(task_id=task_id)
         return task
 
-    def delete_task(self,
-                    task_id: int,
-                    file_operator: FileOperator,
-                    session: Session
-                    ) -> None:
+    def delete_task(
+            self,
+            task_id: int,
+            file_operator: FileOperator
+            ,session: Session
+    ) -> None:
         files = ImageRepository(
             session=session
         ).get_files(task_id=task_id)

@@ -20,9 +20,9 @@ def verify_password(username, password):
     return None
 
 
-from task_manager.routes.tasks_routes import *
-from task_manager.routes.faces_routes import *
-from task_manager.routes.images_routes import *
+from task_manager.tasks.routes import *
+from task_manager.images.routes import *
+from task_manager.faces.routes import *
 
 
 app.register_blueprint(tasks_bp)

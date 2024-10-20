@@ -5,7 +5,7 @@ import requests
 from task_manager.utils.services import AbstractFaceCloudService
 from task_manager.config.base import Config
 from task_manager.exceptions.tevian_exceptions import TevianError
-from task_manager.dto.faces import FaceDataDTO
+from task_manager.faces.dto import FaceDataDTO
 
 
 class TevianFaceCloudService(AbstractFaceCloudService):

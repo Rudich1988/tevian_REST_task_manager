@@ -1,5 +1,5 @@
-from task_manager.dto.faces import FaceResponseDTO
-from task_manager.repositories.faces import FaceRepository
+from task_manager.faces.dto import FaceResponseDTO
+from task_manager.faces.repository import FaceRepository
 
 
 class FaceService:

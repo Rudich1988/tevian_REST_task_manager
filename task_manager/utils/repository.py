@@ -1,8 +1,5 @@
 from abc import ABC, abstractmethod
 
-from sqlalchemy import delete
-from sqlalchemy.exc import NoResultFound
-
 from task_manager.db.db import Session
 
 

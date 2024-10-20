@@ -4,10 +4,10 @@ from flask import jsonify, make_response, Blueprint
 from sqlalchemy.exc import NoResultFound
 
 from task_manager.db.db import db_session
-from task_manager.schemas.faces import FaceResponseSchema
-from task_manager.services.faces import FaceService
+from task_manager.faces.schemas import FaceResponseSchema
+from task_manager.faces.service import FaceService
 from task_manager.app import auth
-from task_manager.repositories.faces import FaceRepository
+from task_manager.faces.repository import FaceRepository
 
 
 faces_bp = Blueprint('faces_routes', __name__)

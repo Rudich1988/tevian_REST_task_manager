@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from task_manager.dto.images import ImageDTO
+from task_manager.images.dto import ImageDTO
 
 
 @dataclass

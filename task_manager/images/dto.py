@@ -1,13 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from task_manager.dto.faces import FaceDTO
-
-
-#@dataclass
-#class ImageDTO:
- #   filename: str
-  #  faces: list[Optional[FaceDTO]]
+from task_manager.faces.dto import FaceDTO
 
 
 @dataclass

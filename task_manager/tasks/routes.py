@@ -4,13 +4,13 @@ from flask import request, jsonify, make_response, Blueprint, Response
 from marshmallow import ValidationError
 from sqlalchemy.exc import NoResultFound
 
-from task_manager.services.file_operator import FileOperator
-from task_manager.services.tasks import TaskService
+from task_manager.images.file_operator import FileOperator
+from task_manager.tasks.service import TaskService
 from task_manager.app import auth
-from task_manager.schemas.tasks import TaskSchema, TaskResponseSchema
+from task_manager.tasks.schemas import TaskSchema, TaskResponseSchema
 from task_manager.db.db import db_session
-from task_manager.repositories.tasks import TaskRepository
-from task_manager.dto.tasks import TaskCreateDTO
+from task_manager.tasks.repository import TaskRepository
+from task_manager.tasks.dto import TaskCreateDTO
 
 
 tasks_bp = Blueprint('tasks_routes', __name__)

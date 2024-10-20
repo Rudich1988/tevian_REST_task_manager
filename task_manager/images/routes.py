@@ -5,14 +5,14 @@ from werkzeug.exceptions import RequestEntityTooLarge
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
 from task_manager.db.db import db_session
-from task_manager.repositories.images import ImageRepository
-from task_manager.repositories.tasks import TaskRepository
-from task_manager.schemas.images import ImageResponseSchema
-from task_manager.services.file_operator import FileOperator
-from task_manager.services.images import ImageService
+from task_manager.images.repository import ImageRepository
+from task_manager.tasks.repository import TaskRepository
+from task_manager.images.schemas import ImageResponseSchema
+from task_manager.images.file_operator import FileOperator
+from task_manager.images.service import ImageService
 from task_manager.app import auth
-from task_manager.services.statistic import StatisticService
-from task_manager.dto.images import ImageDataDTO
+from task_manager.statistic.task_statistic import StatisticService
+from task_manager.images.dto import ImageDataDTO
 from task_manager.exceptions.tevian_exceptions import TevianError
 from task_manager.exceptions.custom_exceptions import FileTypeError
 

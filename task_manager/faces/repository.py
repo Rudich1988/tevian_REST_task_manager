@@ -4,9 +4,9 @@ from typing import Optional
 from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound
 
-from task_manager.models.faces import Face
+from task_manager.faces.models import Face
 from task_manager.utils.repository import SQLAlchemyRepository
-from task_manager.dto.faces import FaceDataDTO, FaceResponseDTO, FaceDTO
+from task_manager.faces.dto import FaceDataDTO, FaceResponseDTO, FaceDTO
 
 
 class FaceRepository(SQLAlchemyRepository):
