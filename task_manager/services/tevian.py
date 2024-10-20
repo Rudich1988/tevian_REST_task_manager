@@ -1,12 +1,19 @@
+from typing import Optional
+
 import requests
 
 from task_manager.utils.services import AbstractFaceCloudService
 from task_manager.config.base import Config
 from task_manager.exceptions.tevian_exceptions import TevianError
+from task_manager.dto.faces import FaceDataDTO
 
 
 class TevianFaceCloudService(AbstractFaceCloudService):
-    def detected_faces(self, file, image_id):
+    def detected_faces(
+            self,
+            file,
+            image_id
+    ) -> list[Optional[FaceDataDTO]]:
         url = f"{Config.FACE_CLOUD_URL}/api/v1/detect"
         token = Config.FACE_ClOUD_TOKEN
         params = {
@@ -31,15 +38,20 @@ class TevianFaceCloudService(AbstractFaceCloudService):
         faces_data = self.transform_data(response.json()['data'], image_id)
         return faces_data
 
-    def transform_data(self, data, image_id):
+    def transform_data(
+            self,
+            data,
+            image_id
+    ) -> list[Optional[FaceDataDTO]]:
         if not data:
             return []
         faces = []
         for face in data:
-            face_data = {}
-            face_data['image_id'] = image_id
-            face_data['bounding_box'] = face['bbox']
-            face_data['age'] = face['demographics']['age']['mean']
-            face_data['gender'] = face['demographics']['gender']
-            faces.append(face_data)
+            face = FaceDataDTO(
+                image_id=image_id,
+                bounding_box=face['bbox'],
+                age=face['demographics']['age']['mean'],
+                gender=face['demographics']['gender']
+            )
+            faces.append(face)
         return faces

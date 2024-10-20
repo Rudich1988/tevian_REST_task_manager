@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import BigInteger, String, Integer, Float
 
 from task_manager.db.db import ModelBase
@@ -18,3 +18,8 @@ class Task(ModelBase):
     male_counter: Mapped[int] = mapped_column(Integer, default=0)
     men_avg_age: Mapped[float] = mapped_column(Float, default=0.0)
     women_avg_age: Mapped[float] = mapped_column(Float, default=0.0)
+
+    images: Mapped[list['Image']] = relationship(
+        'Image',
+        back_populates='task'
+    )

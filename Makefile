@@ -11,4 +11,4 @@ db_upgrade:
 	alembic upgrade head
 
 dev:
-	poetry run flask --app task_manager/app:app --debug run --port 5002
+	poetry run flask --app task_manager/app:app --debug run --port 5000

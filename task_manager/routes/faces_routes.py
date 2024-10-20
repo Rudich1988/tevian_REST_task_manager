@@ -1,7 +1,10 @@
+from dataclasses import asdict
+
 from flask import jsonify, make_response, Blueprint
+from sqlalchemy.exc import NoResultFound
 
 from task_manager.db.db import db_session
-from task_manager.schemas.faces import FaceSchema
+from task_manager.schemas.faces import FaceResponseSchema
 from task_manager.services.faces import FaceService
 from task_manager.app import auth
 from task_manager.repositories.faces import FaceRepository
@@ -16,10 +19,13 @@ def get_face(id: int):
     try:
         with db_session() as s:
             face = FaceService(
-                face_repo=FaceRepository(s),
-                schema=FaceSchema()
-            ).get_face(face_data={'id': id})
-    except IndexError:
+                face_repo=FaceRepository(s)
+            ).get_face(face_id=id)
+            face = FaceResponseSchema().load(
+                asdict(face, dict_factory=dict)
+            )
+            return jsonify(face)
+    except NoResultFound:
         return make_response(
             jsonify({'error': 'face not found'}),
             404
@@ -29,4 +35,3 @@ def get_face(id: int):
             jsonify({'error': 'server error'}),
             500
         )
-    return jsonify(face)

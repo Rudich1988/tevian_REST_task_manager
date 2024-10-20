@@ -31,5 +31,5 @@ class Face(ModelBase):
 
     image: Mapped['Image'] = relationship(
         foreign_keys=[image_id],
-        backref='faces'
+        back_populates='faces'
     )

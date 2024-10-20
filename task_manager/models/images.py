@@ -28,5 +28,10 @@ class Image(ModelBase):
 
     task: Mapped['Task'] = relationship(
         foreign_keys=[task_id],
-        backref='images'
+        back_populates='images'
+    )
+
+    faces: Mapped[list['Face']] = relationship(
+        'Face',
+        back_populates='image'
     )

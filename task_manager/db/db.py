@@ -10,7 +10,7 @@ class ModelBase(DeclarativeBase):
     pass
 
 
-engine = create_engine(Config.DATABASE_URL, echo=False)
+engine = create_engine(Config.DATABASE_URL, echo=True)
 Session = sessionmaker(bind=engine)
 
 @contextmanager
